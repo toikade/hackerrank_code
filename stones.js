@@ -3,47 +3,32 @@ function stones(n=3, a=2, b=3){
     let spaces=n-1;
     let elems=[a,b];
     let exponent=Math.pow(2, (n-1));
-    let checkArr=[];
+    let checkArr=new Array(spaces).fill(0);
     let answer=new Set();
     let finalArr=[];
+    let checkArrCursor=checkArr.length;
     //let reduceArr=(total, num)=>total+num;
-    let setCheckArr=(exp)=>{
-        checkArr=[];
-        for(let i=0; i<spaces; i++){
-            checkArr.push(exp/2);
-            exp/=2;
-        }
-    }
-    let resetCheckArr=(idx)=>{
-        checkArr[idx]=checkArrCopy[idx];
-    }
-    setCheckArr(exponent);
+    
+   
     let checkArrCopy=[...checkArr];
     //console.log('copy', checkArrCopy);
     for(let g=1; g<=exponent; g++){
         //prefix=g<=exponent/2?a:b;
-        //let tempArr=[];
+        let tempArr=[];
         let activeNum;
         let sum=0;
         for(let j=0; j<spaces; j++){
-            activeNum=checkArr[j]>0?a:b;
+            //activeNum=checkArr[j]>0?a:b;
             //console.log('active', activeNum);
-            sum+=activeNum;
-            //tempArr.push(activeNum);
-            
-            checkArr[j]--;
-            if(checkArrCopy[j]==Math.abs(checkArr[j])){
-                resetCheckArr(j);
-                continue;
-            }
-            //console.log('checkArr', checkArr);
+            sum+=elems[checkArr[j]];
+            tempArr.push(elems[checkArr[j]]);
+            //console.log('elems', elems[checkArr[j]]);
         }
-        //console.log(tempArr);
-        //console.log('SUM', sum);
-        answer.add(sum);
-        //console.log('copy', checkArrCopy);
-       
+            //console.log('tempArr',tempArr);
+            
+            checkArr[--checkArrCursor]++;
+            answer.add(sum);
+            if(checkArrCursor==-1) break;
     }
-    finalArr=[...answer];
-    return finalArr;
+    return [...answer].sort((a,b)=>a-b);
 }
