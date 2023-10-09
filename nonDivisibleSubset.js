@@ -5,51 +5,36 @@ function nonDivisibleSubset(k=3, s=[1,7,2,4]){
     let theArrLength=theArr.length;
     let answerArrLength=answerArr.length;
     let counter=0;
-    for(let a=0; a<=answerArrLength; a++){ //loop through # of answerArr
-       // console.log('count', counter);
-        
-        console.log('A',a);
-            console.log('befLEN', answerArr.length);
-        for(let i=counter; i<=theArrLength-1; i++){  //loop through theArr
-            for(j=i; j<=theArrLength-1; j++){ //loop through theArr items
-                if(theArr[i]==theArr[j]) continue;
-                if((theArr[i]+theArr[j])%k==0){
-                    console.log(theArr[i], theArr[j]);
-                    if(!answerArr[a+1]) {
-                        answerArr.push([]);
-                        //console.log(answerArr.indexOf([]));
-                       // answerArrLength++;
-                        /*if(a==1){
-                            //console.log(answerArr);
-                            break;
-                        }*/
+    let longestSet=-Infinity;
+    for(let a=0; a<=answerArrLength-1; a++){ //loop through # of answerArr
+        //console.log(a);
+        theArrLength=answerArr[a].length;
+        let activeNum;
+        //console.log('len', theArrLength);
+        for(let i=counter; i<=theArrLength-1; i++){
+            for(let j=i; j<=theArrLength-1; j++){
+                if(answerArr[a][i]==answerArr[a][j]) continue;
+                if((answerArr[a][i]+answerArr[a][j])%k==0){
+                    console.log(answerArr[a][i], answerArr[a][j]);
+                    if(!answerArr[a+1]) answerArr.push([]);
+                    activeNum=answerArr[a+1].includes(answerArr[a][i])?answerArr[a][i]:answerArr[a][j];
+                    if(!answerArr[a+1].includes(activeNum)){
+                        answerArr[a+1].push(activeNum);
                     }
-                    if(!answerArr[a+1].includes(theArr[j])){
-                        answerArr[a+1].push(theArr[j]);
-                    answerArr[a].splice((answerArr[a].indexOf(j)),1);
-                    }
-                    console.log(answerArr);
-                    console.log('aftLEN', answerArr.length);
                 }
-                //if((theArr[i]+theArr[j])%k==0) continue;
-                //console.log(theArr[i],'+',theArr[j],'/',k,'=',(theArr[i]+theArr[j])%k);
-                //console.log('j', j)
             }
             counter++;
-            //console.log('theArr', theArr);
-            /*if(a==1){
-              //console.log(answerArr);
-              break;
-            }*/
+        }
+        if(!answerArr[a+1]) break;
+        for(let k of answerArr[a+1]){
+            answerArr[a].splice((answerArr[a].indexOf(k)),1);
         }
         counter=0;
-        if(a==1){
-           //console.log(answerArr);
-           break;
-        }
-        //theArr=answerArr[a+1];
+        answerArrLength++;
     }
-    console.log(answerArr);
+    //console.log(answerArr);
+    for(let arr of answerArr){
+        longestSet=arr.length>longestSet?arr.length:longestSet;
+    }
+    return longestSet;
 }
-
-
