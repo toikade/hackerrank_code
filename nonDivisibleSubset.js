@@ -7,76 +7,73 @@ function nonDivisibleSubset(k=3, s=[1,7,2,4]){
     let counter=0;
     let longestSet=-Infinity;
     let a=0;
-    let action='notDivide';
-    
+    let lookupArr=[]
+       
        // theArrLength=answerArr[a].length;
-        let activeNum;
+      let activeNum;
       loopAnswer();  
         function loopAnswer(){
+            //FOR EVERY ELEMENT IN theArr
             for(let i=counter; i<=theArrLength-1; i++){
-                
-                let tempArr=[];
-                if(a==theArrLength-1) break;
-                if(action==='notDivide'){
+                //stop looping at the end of theArr
+               if(a==theArrLength-1) break;
+                //create an empty array for each item in theArr
                 answerArr.push([]);
-                 answerArr[a].push(theArr[i]);
-                }
+                //push the first element of theArr into the empty array above
+                answerArr[a].push(theArr[i]);
+                //FOR EVERY ELEMENT IN theArr
                 for(let j=i; j<=theArrLength-1; j++){
-                    
-                   // if(theArr[i]==theArr[j]) console.log('log', i,j);
-                   // if((theArr[i]+theArr[j])%k==0) console.log('div', i,j,'=',theArr[i],theArr[j]);
-                    if(action==='notDivide'){
-                        //not important
-                        if(theArr[i]==theArr[j]) console.log('USEless', i,j);
-                        //can't be in same arr
-                    if((theArr[i]+theArr[j])%k==0) console.log('cantb', i,j,'=',theArr[i],theArr[j]);
-                        //IF modulo is zero, seperate them
-                        if((theArr[i]+theArr[j])%k!==0){
-                            //console.log(theArr[i], theArr[j]);
-                            console.log('TOT', counter,j, theArrLength, theArr[i],theArr[j]);
-                            activeNum=answerArr[a].includes(theArr[i])?theArr[j]:theArr[j];
-                            if(!answerArr[a].includes(activeNum)){
-                                answerArr[a].push(activeNum);
-                                //console.log('num',activeNum)
-                            }
-                        }
-                    }
-                    if(action==='divide'){
-                       if(answerArr[a][i]==answerArr[a][j]) console.log('log', i,j);
-                       if((answerArr[a][i]+answerArr[a][j])%k!==0) console.log('div', i,j,'=',theArr[i],theArr[j]);
-                        if((answerArr[a][i]+answerArr[a][j])%k==0){
-                            
-                            tempArr.push(answerArr[a][i]);
-                            tempArr.push(answerArr[a][j]);
-                            console.log('tmp',a, tempArr);
-                                               
-                            
-                        }
+                    //continue if the both numbers are same (not needed)
+                     if(theArr[i]==theArr[j]) continue;
+                     //if modulo operation returns 0
+                     if((theArr[i]+theArr[j])%k==0) {
+                         //push the elements to lookupArr
+                        lookupArr.push([theArr[i],theArr[j]]);
+                        console.log('lookupArr',lookupArr);
+                     }
+                    //if modulo operations returns non zero
+                    if((theArr[i]+theArr[j])%k!==0){
+                        //select a consitional value and store in activeNum
+                       activeNum=answerArr[a].includes(theArr[i])?theArr[j]:theArr[j]; 
+                        //if activeNum not in answerArr[a]
+                       if(!answerArr[a].includes(activeNum)){
+                           //push activeNum to answerArr[a]
+                           answerArr[a].push(activeNum);
+                       } 
                     }
                 }
-                if(action==='divide'){
-                    for(let k of tempArr){
-                       answerArr[a].splice(answerArr[a].indexOf(k),1);
-                        console.log(a,answerArr[a]);
-                    }
-                }
+                
+                
                 counter++;
                 
                 a++;
-                if(action==='divide') theArrLength=answerArr[a].length;
+               // if(action==='divide') theArrLength=answerArr[a].length;
             }
-            console.log(answerArr);
-    }
+            console.log('answerArr',answerArr);
+        }
         
-        counter=a=0;
-        theArrLength=answerArr[a].length;
-        action='divide';
-        loopAnswer();
+        //use a set to filter out duplicate values
+    let tempArr=new Set();
+        //loopAnswer();
+    for(let i=0; i<=answerArr.length-1; i++){
+        
+        for(let j=0; j<=lookupArr.length-1; j++){
+           if((answerArr[i].includes(lookupArr[j][0]))&& (answerArr[i].includes(lookupArr[j][1]))){
+               //answerArr[i].splice(answerArr[i].indexOf(lookupArr[j][0]),1);
+               //tempArr.add(lookupArr[j][0]).add(lookupArr[j][1]);
+              // tempArr.add(lookupArr[j][0]);
+               console.log(i, 'tmp', lookupArr[j]);
+           } 
+            //console.log(i,j);
+        }
+        console.log('tmp', tempArr);
+        
+    }
     
     for(let arr of answerArr){
         longestSet=arr.length>longestSet?arr.length:longestSet;
     }
    
     
-    console.log(longestSet);
+   // console.log(theArr.length-tempArr.size);
 }
