@@ -1,79 +1,45 @@
 function nonDivisibleSubset(k=3, s=[1,7,2,4]){
     let nonDuplicate=new Set(s); //remove duplicate values;
     let theArr=[...nonDuplicate]; //convert set to array
-    let answerArr=[];
     let theArrLength=theArr.length;
-    let answerArrLength=answerArr.length;
     let counter=0;
-    let longestSet=-Infinity;
-    let a=0;
-    let lookupArr=[]
-       
-       // theArrLength=answerArr[a].length;
-      let activeNum;
-      loopAnswer();  
-        function loopAnswer(){
-            //FOR EVERY ELEMENT IN theArr
-            for(let i=counter; i<=theArrLength-1; i++){
-                //stop looping at the end of theArr
-               if(a==theArrLength-1) break;
-                //create an empty array for each item in theArr
-                answerArr.push([]);
-                //push the first element of theArr into the empty array above
-                answerArr[a].push(theArr[i]);
-                //FOR EVERY ELEMENT IN theArr
-                for(let j=i; j<=theArrLength-1; j++){
-                    //continue if the both numbers are same (not needed)
-                     if(theArr[i]==theArr[j]) continue;
-                     //if modulo operation returns 0
-                     if((theArr[i]+theArr[j])%k==0) {
-                         //push the elements to lookupArr
-                        lookupArr.push([theArr[i],theArr[j]]);
-                        console.log('lookupArr',lookupArr);
-                     }
-                    //if modulo operations returns non zero
-                    if((theArr[i]+theArr[j])%k!==0){
-                        //select a consitional value and store in activeNum
-                       activeNum=answerArr[a].includes(theArr[i])?theArr[j]:theArr[j]; 
-                        //if activeNum not in answerArr[a]
-                       if(!answerArr[a].includes(activeNum)){
-                           //push activeNum to answerArr[a]
-                           answerArr[a].push(activeNum);
-                       } 
+    let remainderArr=[];//stores an Array of modulo remainders
+    let countObj={};//stores count of remainders
+    let pairArr=[];//stores pairs of remainders whose numbers cant be in the same set
+    let numberToDelete;//number to be removes from remainderArr
+    
+    //FOR EVERY ITEM r OF theArr
+    for(let r of theArr){ 
+        let rem=r%k; // modulo remainder
+        remainderArr.push(rem);
+        countObj[rem]>=1?countObj[rem]++:countObj[rem]=1;//store the count of each remainder in countObj
+    }
+    
+   console.log('remArr', remainderArr);
+   console.log(countObj);
+            
+            let objArr=Object.keys(countObj);
+            let objLength=Object.keys(countObj).length;
+            for(let i=counter; i<=objLength-1; i++){
+                for(let j=i; j<=objLength-1; j++){
+                    
+                    if(+objArr[i]+(+objArr[j])==k){
+                        console.log(objArr[i], objArr[j]);
+                        pairArr.push([+objArr[i],+objArr[j]]);
+                        console.log(pairArr);
                     }
                 }
-                
-                
-                counter++;
-                
-                a++;
-               // if(action==='divide') theArrLength=answerArr[a].length;
             }
-            console.log('answerArr',answerArr);
-        }
+            
+            //FOR EVERY pair IN pairArr
+            for(let pair of pairArr){
+                //if counts of 2 numbers are == return the second : count of pair[0] is smaller return pair[1] else pair[0]
+                numberToDelete=countObj[pair[0]]==countObj[pair[1]]?pair[1]:countObj[pair[0]]<countObj[pair[1]]?pair[0]:pair[1];
+                console.log(numberToDelete);
+                //update remainderArr removing the value of numberToDelete
+                remainderArr=remainderArr.filter(value=>value!==numberToDelete);
+               // console.log(remainderArr);
+            }
         
-        //use a set to filter out duplicate values
-    let tempArr=new Set();
-        //loopAnswer();
-    for(let i=0; i<=answerArr.length-1; i++){
-        
-        for(let j=0; j<=lookupArr.length-1; j++){
-           if((answerArr[i].includes(lookupArr[j][0]))&& (answerArr[i].includes(lookupArr[j][1]))){
-               //answerArr[i].splice(answerArr[i].indexOf(lookupArr[j][0]),1);
-               //tempArr.add(lookupArr[j][0]).add(lookupArr[j][1]);
-              // tempArr.add(lookupArr[j][0]);
-               console.log(i, 'tmp', lookupArr[j]);
-           } 
-            //console.log(i,j);
-        }
-        console.log('tmp', tempArr);
-        
-    }
-    
-    for(let arr of answerArr){
-        longestSet=arr.length>longestSet?arr.length:longestSet;
-    }
-   
-    
-   // console.log(theArr.length-tempArr.size);
+        return (k==0||k==1)?1:remainderArr.length;
 }
